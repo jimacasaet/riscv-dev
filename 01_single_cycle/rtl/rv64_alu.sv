@@ -1,10 +1,18 @@
-module alu #(
-  parameter OP_WIDTH    = 5,
-  parameter DATA_WIDTH  = 64
+//------------------------------------------------------------------------------------------------------
+//  ALU - Arithmetic Logic Unit
+//
+//  Create Date : 2026-05-29
+//  Author      : John Rufino Macasaet
+//  E-Mail      : macasaetjohn@gmail.com
+//------------------------------------------------------------------------------------------------------
+
+module rv64_alu #(
+  parameter OpWidth    = 5,
+  parameter DataWidth  = 64
 )(
-  input     [OP_WIDTH-1  :0]      alu_op_i,
-  input     [DATA_WIDTH-1:0]      op_a_i,
-  input     [DATA_WIDTH-1:0]      op_b_i,
+  input     [OpWidth-1  :0]       alu_op_i,
+  input     [DataWidth-1:0]       op_a_i,
+  input     [DataWidth-1:0]       op_b_i,
   output                          zero_o,
   output                          result_o
 );
