@@ -27,17 +27,17 @@ module rv64_imm_gen #(
 
   // FIXME: Refactor always_comb block
   always_comb begin
-    imm = 0;
+    imm_d = 0;
     case(opcode)
-      OPCODE_LD:      imm_d = { {52{inst[31]}} , inst[31:20]};
-      OPCODE_ADDI:    imm_d = { {52{inst[31]}} , inst[31:20]};
-      OPCODE_JALR:    imm_d = { {52{inst[31]}} , inst[31:20]};
-      OPCODE_SD:      imm_d = { {52{inst[31]}} , inst[31:25], inst[11:7]};
+      OPCODE_LD:      imm_d = { {52{inst_i[31]}} , inst_i[31:20]};
+      OPCODE_ADDI:    imm_d = { {52{inst_i[31]}} , inst_i[31:20]};
+      OPCODE_JALR:    imm_d = { {52{inst_i[31]}} , inst_i[31:20]};
+      OPCODE_SD:      imm_d = { {52{inst_i[31]}} , inst_i[31:25], inst_i[11:7]};
       default:        imm_d = 0;
     endcase
   end
 
-  assign opcode = inst[6:0];
-  assign imm    = imm_d;
+  assign opcode = inst_i[6:0];
+  assign imm_o  = imm_d;
 
 endmodule // rv64_imm_gen

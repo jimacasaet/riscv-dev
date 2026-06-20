@@ -24,4 +24,4 @@ module rv64_pc_reg #(
 
   assign current_o = current_d;
 
-endmodule
+endmodule // rv64_pc_reg

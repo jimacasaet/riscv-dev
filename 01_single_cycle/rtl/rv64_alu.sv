@@ -53,4 +53,4 @@ module rv64_alu #(
 
   assign zero_o = result_d;
 
-endmodule : alu
+endmodule : rv64_alu
