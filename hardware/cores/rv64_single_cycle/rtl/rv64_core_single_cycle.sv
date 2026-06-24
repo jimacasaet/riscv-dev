@@ -84,22 +84,22 @@ module rv64_core_single_cycle#(
   //==============================
   //  Register File
   //==============================
-  RegisterFile I_RegisterFile(
-    .clk_i          (clk_i          ), 
-    .rst_ni         (rst_ni         ),
-    .reg_wr_en      (RegWrite       ), 
-    .reg_wr_data    (mux3_to_RegFile),
-    .reg_read_addr1 (inst[19:15]    ), 
-    .reg_read_addr2 (inst[24:20]    ),
-    .reg_read_data1 (rd1_to_inA     ), 
-    .reg_read_data2 (rd2_out        ),
-    .reg_wr_dest    (inst[11:7]     )
+  rv64_register_file u_rv64_register_file(
+    .clk_i            (clk_i          ), 
+    .rst_ni           (rst_ni         ),
+    .reg_wr_en_i      (RegWrite       ), 
+    .reg_wr_data_i    (mux3_to_RegFile),
+    .reg_wr_dest_i    (inst[11:7]     ),
+    .reg_read_addr1_i (inst[19:15]    ), 
+    .reg_read_addr2_i (inst[24:20]    ),
+    .reg_read_data1_o (rd1_to_inA     ), 
+    .reg_read_data2_o (rd2_out        )
   );
   
   //==============================
   // Immediate Generator
   //==============================
-  rv64_imm_gen I_IMMGEN(
+  rv64_imm_gen u_rv64_imm_gen(
     .inst_i (inst ),
     .imm_o  (imm  )
   );
@@ -107,7 +107,7 @@ module rv64_core_single_cycle#(
   //==============================
   // MUX (RegFile/Immediate to ALU)
   //==============================
-  MUX I_MUX_REG_TO_ALU(
+  prim_mux I_MUX_REG_TO_ALU(
     .in0(rd2_out), 
     .in1(imm), 
     .sel(ALUSrc), 
@@ -118,15 +118,17 @@ module rv64_core_single_cycle#(
   //  ALU
   //==============================
   rv64_alu u_rv64_alu(
-      .ALUop(ALUOp), 
-      .inA(rd1_to_inA), .inB(mux_to_inB),
-      .zero(zero), .result(ALURes)
+    .alu_op_i (ALUOp      ), 
+    .op_a_i   (rd1_to_inA ), 
+    .op_b_i   (mux_to_inB ),
+    .zero_o   (zero       ), 
+    .result_o (ALURes     )
   );
   
   //==============================
   //  MUX3 (ALURes/Rdata/PC+4 To RegFile)
   //==============================
-  MUX3 I_MUX3_REGWR(
+  prim_mux3 u_mux3_regwr(
       .in0(ALURes),
       .in1(rdata),
       .in2({ {PcWidth{adder0_res[PcWidth-1]}}, adder0_res}), // sign extend to 64 bits
@@ -141,10 +143,10 @@ module rv64_core_single_cycle#(
   // Set constant to 4
   assign const_four = 32'd4;
   
-  ADD I_ADD_ADDER0(
-      .A(pc_out),
-      .B(const_four),
-      .Sum(adder0_res)
+  prim_add I_ADD_ADDER0(
+      .A    (pc_out     ),
+      .B    (const_four ),
+      .Sum  (adder0_res )
   );
   
   //==============================
@@ -155,7 +157,7 @@ module rv64_core_single_cycle#(
   // (Must be 32 bits)
   assign branch_imm = { {19{inst[31]}} ,inst[31],inst[7],inst[30:25],inst[11:8],1'b0};
   
-  ADD I_ADD_ADDER1(
+  prim_add I_ADD_ADDER1(
       .A(pc_out),
       .B(branch_imm),
       .Sum(adder1_res)
@@ -166,7 +168,7 @@ module rv64_core_single_cycle#(
   //==============================
   assign branch_sel = zero & Branch;
   
-  MUX #(PcWidth) I_MUX_PC4_BRANCH(
+  prim_mux #(PcWidth) u_mux_pc4_branch(
       .in0(adder0_res), 
       .in1(adder1_res), 
       .sel(branch_sel), 
@@ -181,7 +183,7 @@ module rv64_core_single_cycle#(
   // sign-extended, 32 bits
   assign JAL_imm = { {11{inst[31]}} ,inst[31],inst[19:12],inst[20],inst[30:21],1'b0} ;
   
-  ADD I_ADD_ADDER2(
+  prim_add I_ADD_ADDER2(
       .A(pc_out),
       .B(JAL_imm),
       .Sum(adder2_res)
@@ -190,7 +192,7 @@ module rv64_core_single_cycle#(
   //==============================
   // MUX3 (To PC)
   //==============================
-  MUX3 #(PcWidth) I_MUX3_TO_PC (
+  prim_mux3 #(PcWidth) u_mux3_to_pc (
       .in0(branch_res),
       .in1(adder2_res),
       .in2(ALURes[PcWidth-1:0]),
@@ -200,10 +202,11 @@ module rv64_core_single_cycle#(
   //==============================
   //  ProgramCounter
   //==============================
-  PC I_PC(
-      .clk_i(clk_i), .rst_ni(rst_ni),
-      .next(mux_to_PC), 
-      .current(pc_out)
+  rv64_pc_reg u_rv64_pc_reg(
+      .clk_i    (clk_i      ), 
+      .rst_ni   (rst_ni     ),
+      .next_i   (mux_to_PC  ), 
+      .current_o(pc_out     )
   );
   
   //==============================
@@ -216,7 +219,7 @@ module rv64_core_single_cycle#(
   //==============================
   //  Control
   //==============================
-  Control I_Control(
+  rv64_controller_single_cycle u_rv64_controller(
       .opcode(opcode), 
       .funct3(funct3), 
       .funct7(funct7),
