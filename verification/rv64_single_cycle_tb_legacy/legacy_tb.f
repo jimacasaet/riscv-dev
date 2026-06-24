@@ -1,0 +1,5 @@
++incdir+$GIT_ROOT/verification/rv64_single_cycle_tb_legacy/
+
+$GIT_ROOT/verification/rv64_single_cycle_tb_legacy/legacy_data_mem.sv
+$GIT_ROOT/verification/rv64_single_cycle_tb_legacy/legacy_program_mem.sv
+$GIT_ROOT/verification/rv64_single_cycle_tb_legacy/rv64_single_cycle_tb_legacy.sv
