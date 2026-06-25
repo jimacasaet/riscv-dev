@@ -7,7 +7,8 @@
 //------------------------------------------------------------------------------------------------------
 module legacy_data_mem#(
   parameter DATA_DEP = 512,
-  parameter ADDR_WID = 29 
+  parameter ADDR_WID = 29,
+  parameter DATA_WID = 64
 )(   
   input                   clk,
   input   [ADDR_WID-1:0]  addr, 
@@ -16,8 +17,9 @@ module legacy_data_mem#(
   input   [63:0]          wdata,
   input   [7:0]           wmask
 );
-  string       memdata_file;
-  logic [63:0] memdata [0:DATA_DEP-1];
+  integer              i;
+  string               memdata_file;
+  logic [DATA_WID-1:0] memdata [0:DATA_DEP-1];
   
   assign rdata = memdata[addr];
       
@@ -43,6 +45,9 @@ module legacy_data_mem#(
   end
     
   initial begin
+    for(i=0; i < DATA_DEP; i=i+1)
+      memdata[i]= '0;
+
     if($value$plusargs("MEMDATA=%s", memdata_file))
       $readmemh(memdata_file, memdata);
     else

@@ -66,9 +66,11 @@ module rv64_single_cycle_tb_legacy();
     // Dump
     initial begin
       `ifdef VCS
-        $vcdplusfile("dump.vpd");
-        $vcdpluson();
-        $vcdplusmemon();
+        // $vcdplusfile("dump.vpd");
+        // $vcdpluson();
+        // $vcdplusmemon();
+        $fsdbDumpfile("dump.fsdb");
+        $fsdbDumpvars(0, "+mda"); 
       `elsif XCELIUM begin
         $recordfile("dump.trn");
         $recordvars();
