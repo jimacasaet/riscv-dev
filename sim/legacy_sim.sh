@@ -11,3 +11,8 @@ vcs -sverilog \
   -debug_access+all \
   -l compile.log \
   +error+100
+
+./simv \
+  +MEMDATA=$GIT_ROOT/software/legacy_tests/arithtest_data.mem \
+  +MEMPROG=$GIT_ROOT/software/legacy_tests/arithtest_prog.mem
+  

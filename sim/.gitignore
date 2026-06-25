@@ -2,3 +2,6 @@ compile.log
 csrc
 simv
 simv.daidir
+*.trn
+*.vpd
+*.vcd

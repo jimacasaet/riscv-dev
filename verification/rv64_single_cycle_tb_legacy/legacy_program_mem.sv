@@ -12,31 +12,16 @@ module legacy_program_mem#(
   input   [ADDR_WID-1:0]  addr,
   output  [31:0]          rdata
 );
-  
+  string     memprog_file;
   reg [31:0] memdata [0:DATA_DEP-1];
   
   assign rdata = memdata[addr];
   
   initial begin
-      `ifdef LDTEST
-      $readmemh("ldtest_prog.mem",memdata);
-      `elsif ATEST
-      $readmemh("arithtest_prog.mem",memdata);
-      `elsif BTEST
-      $readmemh("brtest_prog.mem",memdata);
-      `elsif LTEST
-      $readmemh("looptest_prog.mem",memdata);
-      `elsif JTEST
-      $readmemh("jtest_prog.mem",memdata);
-      `elsif PLDTEST
-      $readmemh("pldtest_prog.mem",memdata);
-      `elsif PATEST
-      $readmemh("parithtest_prog.mem",memdata);
-      `elsif PBTEST
-      $readmemh("pbrtest_prog.mem",memdata);
-      `else
-      $readmemh("progmem.mem",memdata);
-      `endif
+    if($value$plusargs("MEMPROG=%s", memprog_file))
+      $readmemh(memprog_file, memdata);
+    else
+      $fatal("Program memory data file not specified. Use +MEMPROG=<path_to_file>");
   end
       
 endmodule : legacy_program_mem

@@ -58,21 +58,27 @@ module rv64_single_cycle_tb_legacy();
         @(negedge clk);
         nrst    = 1'b1;
         @(posedge clk);
-        `ifdef LDTEST
-            repeat(30) @(posedge clk);
-        `elsif ATEST
-            repeat(40) @(posedge clk);
-        `elsif BTEST
-            repeat(30) @(posedge clk);
-        `elsif LTEST
-            repeat(180) @(posedge clk);
-        `elsif JTEST
-            repeat(25) @(posedge clk);
-        `else
-            repeat(40) @(posedge clk);
-        `endif
+        repeat(180) @(posedge clk);
 
         $finish;
+    end
+
+    // Dump
+    initial begin
+      `ifdef VCS
+        $vcdplusfile("dump.vpd");
+        $vcdpluson();
+        $vcdplusmemon();
+      `elsif XCELIUM begin
+        $recordfile("dump.trn");
+        $recordvars();
+      end
+      `else begin
+        $dumpfile("dump.vcd");
+        $dumpvars();
+      end
+      `endif
+
     end
 
 endmodule : rv64_single_cycle_tb_legacy

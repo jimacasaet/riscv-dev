@@ -16,10 +16,10 @@ module legacy_data_mem#(
   input   [63:0]          wdata,
   input   [7:0]           wmask
 );
-    
-    reg [63:0] memdata [0:DATA_DEP-1];
-    
-    assign rdata = memdata[addr];
+  string       memdata_file;
+  logic [63:0] memdata [0:DATA_DEP-1];
+  
+  assign rdata = memdata[addr];
       
   always@(posedge clk) begin
     if (wr_en) begin
@@ -43,25 +43,10 @@ module legacy_data_mem#(
   end
     
   initial begin
-    `ifdef LDTEST
-    $readmemh("ldtest_data.mem",memdata);
-    `elsif ATEST
-    $readmemh("arithtest_data.mem",memdata);
-    `elsif BTEST
-    $readmemh("brtest_data.mem",memdata);
-    `elsif LTEST
-    $readmemh("looptest_data.mem",memdata);
-    `elsif JTEST
-    $readmemh("jtest_data.mem",memdata);
-    `elsif PLDTEST
-    $readmemh("pldtest_data.mem",memdata);
-    `elsif PATEST
-    $readmemh("parithtest_data.mem",memdata);
-    `elsif PBTEST
-    $readmemh("pbrtest_data.mem",memdata);
-    `else
-    $readmemh("datamem.mem",memdata);
-    `endif
+    if($value$plusargs("MEMDATA=%s", memdata_file))
+      $readmemh(memdata_file, memdata);
+    else
+      $fatal("Data memory data file not specified. Use +MEMDATA=<path_to_file>");
   end
         
 endmodule : legacy_data_mem
