@@ -14,7 +14,7 @@ module rv64_alu #(
   input     [DataWidth-1:0]       op_a_i,
   input     [DataWidth-1:0]       op_b_i,
   output                          zero_o,
-  output                          result_o
+  output    [DataWidth-1:0]       result_o
 );
 
   // ALU Opcodes
@@ -26,8 +26,8 @@ module rv64_alu #(
   localparam OP_SLT       = 7;
   localparam OP_ISEQ      = 10;
 
-  logic result_d;
-  logic zero_d;
+  logic [DataWidth-1:0] result_d;
+  logic                 zero_d;
   
   always_comb begin
     case(alu_op_i)

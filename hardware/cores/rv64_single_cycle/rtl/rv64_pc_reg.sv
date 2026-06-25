@@ -15,7 +15,7 @@ module rv64_pc_reg #(
     output     [PcWidth-1:0]    current_o
 );
 
-  logic current_d;
+  logic        [PcWidth-1:0]    current_d;
 
   always@(posedge clk_i) begin
     if(!rst_ni) current_d <= 0;
