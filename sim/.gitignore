@@ -1,7 +1,3 @@
-compile.log
-csrc
-simv
-simv.daidir
-*.trn
-*.vpd
-*.vcd
+*
+!*.sh
+!Makefile
