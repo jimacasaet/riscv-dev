@@ -1,7 +1,48 @@
 # Instruction Compliance
 
 ## RV64I Instructions Implemented
-
+| Category | Instruction | Description | Status | What needs to be added / modified |
+| :--- | :--- | :--- | :---: | :--- |
+| **Upper Immediate** | `LUI` | Load Upper Immediate | ❌ Missing | Add decoding logic to shift a 20-bit immediate left by 12 bits. |
+| | `AUIPC` | Add Upper Immediate to PC | ❌ Missing | Essential for PC-relative addressing / function calls. |
+| **Unconditional Jump**| `JAL` | Jump and Link | Implemented | Ensure it sign-extends the offset correctly to 64-bit boundaries. |
+| | `JALR` | Jump and Link Register | ✔ Implemented | Ensure it sets the least-significant bit of the target to 0. |
+| **Conditional Branch**| `BEQ` | Branch if Equal | ✔ Implemented | Performs standard equality check. |
+| | `BNE` | Branch if Not Equal | ✔ Implemented | Performs standard inequality check. |
+| | `BLT` | Branch if Less Than (Signed) | ❌ Missing | Needs signed arithmetic comparison logic. |
+| | `BGE` | Branch if Greater/Equal (Signed) | ❌ Missing | Needs signed arithmetic comparison logic. |
+| | `BLTU` | Branch if Less Than (Unsigned) | ❌ Missing | Needs unsigned arithmetic comparison logic. |
+| | `BGEU` | Branch if Greater/Equal (Unsigned)| ❌ Missing | Needs unsigned arithmetic comparison logic. |
+| **Loads** | `LB` | Load Byte (Signed) | ❌ Missing | Needs byte mask extraction + sign-extension to 64 bits. |
+| | `LH` | Load Halfword (Signed) | ❌ Missing | Halfword mask extraction + sign-extension to 64 bits. |
+| | `LW` | Load Word (Signed) | ❌ Missing | Word mask extraction + sign-extension to 64 bits. |
+| | `LBU` | Load Byte Unsigned | ❌ Missing | Zero-extends a byte to 64 bits. |
+| | `LHU` | Load Halfword Unsigned | ❌ Missing | Zero-extends a halfword to 64 bits. |
+| **Stores** | `SB` | Store Byte | ❌ Missing | Lower 8-bit routing logic to memory. |
+| | `SH` | Store Halfword | ❌ Missing | Lower 16-bit routing logic to memory. |
+| | `SW` | Store Word | ❌ Missing | Lower 32-bit routing logic to memory. |
+| **Arithmetic (Imm)** | `ADDI` | Add Immediate | ✔ Implemented | Ensure the 12-bit immediate expands natively to 64 bits. |
+| | `SLTI` | Set Less Than Immediate (Signed)| ❌ Missing | Immediate comparison against register. |
+| | `SLTIU`| Set Less Than Immediate (Unsigned)| ❌ Missing | Immediate comparison against register. |
+| | `ANDI` | AND Immediate | ❌ Missing | Bitwise immediate logic. |
+| | `ORI`  | OR Immediate | ❌ Missing | Bitwise immediate logic. |
+| | `XORI` | XOR Immediate | ❌ Missing | Bitwise immediate logic. |
+| **Shifts (Imm)** | `SLLI` | Shift Left Logical Immediate | ❌ Missing | Operates on 64 bits (needs a 6-bit shift amount decoding). |
+| | `SRLI` | Shift Right Logical Immediate | ❌ Missing | Operates on 64 bits (needs a 6-bit shift amount decoding). |
+| | `SRAI` | Shift Right Arithmetic Immediate| ❌ Missing | Shift right preserving the sign bit across 64 bits. |
+| **Arithmetic (Reg)** | `ADD`  | Add Registers | ✔ Implemented | 64-bit addition. |
+| | `SUB`  | Subtract Registers | Implemented | 64-bit subtraction. |
+| | `SLT`  | Set Less Than (Signed) | Implemented | Register comparison. |
+| | `SLTU` | Set Less Than (Unsigned) | ❌ Missing | Unsigned register comparison. |
+| | `AND`  | Bitwise AND | ✔ Implemented | 64-bit bitwise logic. |
+| | `OR`   | Bitwise OR | ✔ Implemented | 64-bit bitwise logic. |
+| | `XOR`  | Bitwise XOR | ✔ Implemented | 64-bit bitwise logic. |
+| **Shifts (Reg)** | `SLL`  | Shift Left Logical | ❌ Missing | Shift register values dynamically. |
+| | `SRL`  | Shift Right Logical | ❌ Missing | Shift register values dynamically. |
+| | `SRA`  | Shift Right Arithmetic | ❌ Missing | Shift right preserving the sign bit. |
+| **System/Environment**| `FENCE`| Fence Memory / Ordering | ❌ Missing | Can be treated as a NOP if you have a simple in-order core. |
+| | `ECALL`| Environment Call | ❌ Missing | Crucial for triggering system traps or passing compliance tests. |
+| | `EBREAK`| Environment Breakpoint | ❌ Missing | Used by debuggers. |
 ## ALU Operations Implemented
 
 | Operation Category | ALU Operation | Description | Status |
