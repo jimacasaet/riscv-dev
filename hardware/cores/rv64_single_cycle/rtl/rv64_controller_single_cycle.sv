@@ -6,6 +6,8 @@
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
 
+import typedefs_pkg::*;
+
 module rv64_controller_single_cycle#(  
   parameter   ALUOP_WIDTH     =  5,
   parameter   OPCODE_WIDTH    =  7,
@@ -28,7 +30,7 @@ module rv64_controller_single_cycle#(
     output reg                     MemRead,
     output reg [PCSRC_WIDTH-1:0]   PCSrc,
     output reg [REGWRSRC_WIDTH-1:0]RegWrSrc,
-    output reg [ALUOP_WIDTH-1:0]   ALUOp,
+    output alu_op_e                ALUOp,
     output reg                     ALUSrc,
     output reg                     RegWrite,
     //==============================
@@ -37,6 +39,7 @@ module rv64_controller_single_cycle#(
     output reg                     wr_en,
     output reg [WMASK_WIDTH-1:0]   wmask
 );
+  alu_op_e  alu_op_d;
 
   //==============================
   //  OPCODES
@@ -65,23 +68,13 @@ module rv64_controller_single_cycle#(
   //==============================
   localparam   funct7_add      = 7'd0;
   localparam   funct7_sub      = 7'b0100000;
-  //===============================
-  //  ALU Opcodes
-  //===============================
-  localparam   OP_AND        =   0;
-  localparam   OP_OR         =   1;
-  localparam   OP_ADD        =   2;
-  localparam   OP_XOR        =   3;
-  localparam   OP_SUB        =   6;
-  localparam   OP_SLT        =   7;
-  localparam   OP_ISEQ       =   10;
 
   always_comb begin
     Branch      = 0;
     MemRead     = 0;
     PCSrc       = 0;
     RegWrSrc    = 0;
-    ALUOp       = 64;
+    alu_op_d    = OP_DEFAULT;
     ALUSrc      = 0;
     RegWrite    = 0;
     wr_en       = 0;
@@ -95,7 +88,7 @@ module rv64_controller_single_cycle#(
         if(funct3==funct3_ld) begin
           RegWrite    = 1'b1;     // Write to Register File
           RegWrSrc    = 2'd1;     // Choose rdata input to write to Register File
-          ALUOp       = OP_ADD;   // Add op
+          alu_op_d    = OP_ADD;   // Add op
           ALUSrc      = 1'b1;     // Choose i-type immediate as ALU inB
         end
       end
@@ -104,7 +97,7 @@ module rv64_controller_single_cycle#(
         if(funct3==0) begin
           RegWrite    = 1'b1;     // Write to Register File
           RegWrSrc    = 2'd0;     // Choose ALURes to write to Register File
-          ALUOp       = OP_ADD;   // Add ALU OP
+          alu_op_d    = OP_ADD;   // Add ALU OP
           ALUSrc      = 1'b1;     // Choose Immediate as ALU inB
         end
       end
@@ -113,7 +106,7 @@ module rv64_controller_single_cycle#(
         if(funct3==0) begin
           RegWrite    = 1'b1;     // Write to Register File
           RegWrSrc    = 2'd2;     // Choose PC+4 to write to Register File
-          ALUOp       = OP_ADD;   // Add ALU OP
+          alu_op_d    = OP_ADD;   // Add ALU OP
           ALUSrc      = 1'b1;     // Choose Immediate as ALU inB
           PCSrc       = 2'd2;     // Choose ALURes to write to PC
         end
@@ -126,7 +119,7 @@ module rv64_controller_single_cycle#(
       opcode_sd: begin
         if(funct3==funct3_sd) begin
           ALUSrc      = 1'b1;     // Choose Immediate as ALU inB
-          ALUOp       = OP_ADD;   // Add ALU OP
+          alu_op_d    = OP_ADD;   // Add ALU OP
           wr_en       = 1'b1;     // Enable write to Data Memory
         end
       end
@@ -139,25 +132,25 @@ module rv64_controller_single_cycle#(
           case(funct3) 
               funct3_addsub: begin 
                   if(funct7==funct7_add)    
-                      ALUOp = OP_ADD;
+                      alu_op_d = OP_ADD;
                   else if(funct7==funct7_sub)
-                      ALUOp = OP_SUB;
+                      alu_op_d = OP_SUB;
               end
               
               funct3_and: begin
-                      ALUOp = OP_AND; 
+                      alu_op_d = OP_AND; 
               end
               
               funct3_or: begin 
-                      ALUOp = OP_OR; 
+                      alu_op_d = OP_OR; 
               end
               
               funct3_xor: begin 
-                      ALUOp = OP_XOR; 
+                      alu_op_d = OP_XOR; 
               end
               
               funct3_slt: begin 
-                      ALUOp = OP_SLT; 
+                      alu_op_d = OP_SLT; 
               end
           endcase
       end
@@ -168,10 +161,10 @@ module rv64_controller_single_cycle#(
       opcode_sbtype: begin
           Branch = 1'b1;
           if(funct3==funct3_beq) begin
-              ALUOp = OP_XOR;
+              alu_op_d = OP_XOR;
           end
           else if(funct3==funct3_bne) begin
-              ALUOp = OP_ISEQ;
+              alu_op_d = OP_ISEQ;
           end
       end
       
@@ -189,7 +182,7 @@ module rv64_controller_single_cycle#(
           MemRead     = 0;
           PCSrc       = 0;
           RegWrSrc    = 0;
-          ALUOp       = 64;
+          alu_op_d    = OP_DEFAULT;
           ALUSrc      = 0;
           RegWrite    = 0;
           wr_en       = 0;
@@ -197,5 +190,7 @@ module rv64_controller_single_cycle#(
       end
     endcase
   end
+
+  assign ALUOp = alu_op_d;
 
 endmodule // rv64_controller_single_cycle

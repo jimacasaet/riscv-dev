@@ -5,26 +5,19 @@
 //  Author      : John Rufino Macasaet
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
+import typedefs_pkg::*;
 
 module rv64_alu #(
-  parameter OpWidth    = 5,
+  parameter OpWidth    = ALUOpWidth,
   parameter DataWidth  = 64
 )(
-  input     [OpWidth-1  :0]       alu_op_i,
+  input     alu_op_e              alu_op_i,
   input     [DataWidth-1:0]       op_a_i,
   input     [DataWidth-1:0]       op_b_i,
   output                          zero_o,
   output    [DataWidth-1:0]       result_o
 );
 
-  // ALU Opcodes
-  localparam OP_AND       = 0;
-  localparam OP_OR        = 1;
-  localparam OP_ADD       = 2;
-  localparam OP_XOR       = 3;
-  localparam OP_SUB       = 6;
-  localparam OP_SLT       = 7;
-  localparam OP_ISEQ      = 10;
 
   logic [DataWidth-1:0] result_d;
   logic                 zero_d;
