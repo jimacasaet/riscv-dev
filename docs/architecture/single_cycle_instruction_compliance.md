@@ -1,4 +1,5 @@
 # Instruction Compliance
+For up-to-date information on instruction compliance, refer to [this google doc](https://docs.google.com/spreadsheets/d/1suEQ8r6ZtniUIkFAqeC4Rk_CDDPZjawqDIjiyr5G5v8/edit?usp=sharing).
 
 ## Instructions Implemented
 ### RV32I

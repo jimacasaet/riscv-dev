@@ -1,4 +1,5 @@
 # Microarchitecture Specification
+For an up-to-date version of the spec, please refer to [this google doc](https://docs.google.com/spreadsheets/d/1suEQ8r6ZtniUIkFAqeC4Rk_CDDPZjawqDIjiyr5G5v8/edit?usp=sharing).
 
 ## Overview and Architectural Targets
 
