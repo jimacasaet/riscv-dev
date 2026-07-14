@@ -5,9 +5,10 @@
 //  Author      : John Rufino Macasaet
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
-import typedefs_pkg::*;
 
-module rv64_alu #(
+module rv64_alu 
+import typedefs_pkg::*;
+#(
   parameter OpWidth    = ALUOpWidth,
   parameter DataWidth  = 64
 )(
@@ -18,19 +19,22 @@ module rv64_alu #(
   output    [DataWidth-1:0]       result_o
 );
 
-
   logic [DataWidth-1:0] result_d;
   logic                 zero_d;
   
   always_comb begin
     case(alu_op_i)
-      OP_AND:   result_d = op_a_i & op_b_i;
-      OP_OR :   result_d = op_a_i | op_b_i;
       OP_ADD:   result_d = op_a_i + op_b_i;
-      OP_XOR:   result_d = op_a_i ^ op_b_i;
       OP_SUB:   result_d = $signed(op_a_i) - $signed(op_b_i);
-      OP_SLT:   result_d = $signed(op_a_i) <  $signed(op_b_i) ? 1 : 0;
-      OP_ISEQ:  result_d = $signed(op_a_i) == $signed(op_b_i) ? 1 : 0;
+      OP_SLL:   result_d = op_a_i << op_b_i[5:0];
+      OP_SRL:   result_d = op_a_i >> op_b_i[5:0];
+      OP_SRA:   result_d = $signed(op_a_i) >>> op_b_i[5:0];
+      OP_SLT:   result_d = $signed(op_a_i) <  $signed(op_b_i) ? DataWidth'(1) : DataWidth'(0);
+      OP_SLTU:  result_d = op_a_i < op_b_i ?  DataWidth'(1) : DataWidth'(0);
+      OP_AND:   result_d = op_a_i & op_b_i;
+      OP_OR :   result_d = op_a_i | op_b_i;  
+      OP_XOR:   result_d = op_a_i ^ op_b_i;
+      OP_ISEQ:  result_d = $signed(op_a_i) == $signed(op_b_i) ?  DataWidth'(1) : DataWidth'(0);
       default:  result_d = 0;
     endcase
   end
@@ -38,10 +42,11 @@ module rv64_alu #(
   assign result_o = result_d;
 
   always_comb begin
-    if(result_d == 0)
+    if(result_d == 0) begin
       zero_d = 1'b1;
-    else
+    end else begin
       zero_d = 1'b0;
+    end
   end
 
   assign zero_o = result_d;

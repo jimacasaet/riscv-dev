@@ -5,7 +5,9 @@
 //  Author      : John Rufino Macasaet
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
-module rv64_core_single_cycle#(
+module rv64_core_single_cycle
+import typedefs_pkg::*;
+#(
   parameter PcWidth    = 32,
   parameter InstWidth  = 32,
   parameter AddrWidth  = 32,
@@ -63,7 +65,7 @@ module rv64_core_single_cycle#(
   
   // Control Output Wires
   wire                        Branch, MemRead, MemToReg;
-  wire    [ALUOP_WIDTH-1:0]   ALUOp;
+  alu_op_e                    ALUOp;
   wire                        ALUSrc, RegWrite;
   wire    [1:0]               RegWrSrc, PCSrc;
   

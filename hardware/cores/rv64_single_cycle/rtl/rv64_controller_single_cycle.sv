@@ -6,9 +6,10 @@
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
 
-import typedefs_pkg::*;
 
-module rv64_controller_single_cycle#(  
+module rv64_controller_single_cycle
+import typedefs_pkg::*;
+#(  
   parameter   ALUOP_WIDTH     =  5,
   parameter   OPCODE_WIDTH    =  7,
   parameter   FUNCT3_WIDTH    =  3,
@@ -39,6 +40,7 @@ module rv64_controller_single_cycle#(
     output reg                     wr_en,
     output reg [WMASK_WIDTH-1:0]   wmask
 );
+
   alu_op_e  alu_op_d;
 
   //==============================
