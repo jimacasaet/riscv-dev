@@ -34,8 +34,13 @@ import typedefs_pkg::*;
       OP_AND:   result_d = op_a_i & op_b_i;
       OP_OR :   result_d = op_a_i | op_b_i;  
       OP_XOR:   result_d = op_a_i ^ op_b_i;
+      OP_ADDW:  result_d = DataWidth'($signed(op_a_i[WordSize-1 : 0] + op_b_i[WordSize-1 : 0]));
+      OP_SUBW:  result_d = DataWidth'($signed(op_a_i[WordSize-1 : 0] - op_b_i[WordSize-1 : 0]));
+      OP_SLLW:  result_d = DataWidth'($signed(op_a_i[WordSize-1 : 0] << op_b_i[$clog2(WordSize)-1 : 0]));
+      OP_SRLW:  result_d = DataWidth'($signed(op_a_i[WordSize-1 : 0] >> op_b_i[$clog2(WordSize)-1 : 0]));
+      OP_SRAW:  result_d = DataWidth'($signed($signed(op_a_i[WordSize-1 : 0]) >>> op_b_i[$clog2(WordSize)-1 : 0]));
       OP_ISEQ:  result_d = $signed(op_a_i) == $signed(op_b_i) ?  DataWidth'(1) : DataWidth'(0);
-      default:  result_d = 0;
+      default:  result_d = DataWidth'(0);
     endcase
   end
 
@@ -49,6 +54,6 @@ import typedefs_pkg::*;
     end
   end
 
-  assign zero_o = result_d;
+  assign zero_o = zero_d;
 
 endmodule : rv64_alu
