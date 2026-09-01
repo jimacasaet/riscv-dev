@@ -2,6 +2,9 @@
 
 export GIT_ROOT=$(git rev-parse --show-toplevel)
 
+# --- Step 1: Parse Filelist & Compile (vcs) ---
+echo "[1/2] Compiling SystemVerilog source files (vcs)..."
+
 vcs -sverilog \
   -full64 \
   -kdb \
@@ -14,6 +17,9 @@ vcs -sverilog \
   -debug_access+all \
   -l compile.log \
   +error+100
+
+# --- Step 2: Run Simulation Batch Mode (simv) ---
+echo "[2/2] Executing simulation (simv)..."
 
 ./simv \
   -licqueue \
