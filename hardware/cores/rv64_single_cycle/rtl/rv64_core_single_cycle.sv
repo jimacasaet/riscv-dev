@@ -7,15 +7,7 @@
 //------------------------------------------------------------------------------------------------------
 module rv64_core_single_cycle
 import typedefs_pkg::*;
-#(
-  parameter PcWidth    = 32,
-  parameter InstWidth  = 32,
-  parameter AddrWidth  = 32,
-  parameter WdataWidth = 64,
-  parameter WmaskWidth = 8,
-  parameter RdataWidth = 64,
-  parameter DATA_WIDTH  = 64
-)(
+(
   //==============================
   //  Clocks and resets
   //==============================
@@ -35,11 +27,6 @@ import typedefs_pkg::*;
   output  [WmaskWidth-1:0]   wmask,
   input   [RdataWidth-1:0]   rdata
 );
-
-  localparam ALUOP_WIDTH = 5;
-  localparam FUNCT3_WIDTH= 3;
-  localparam FUNCT7_WIDTH= 7;
-  localparam OPCODE_WIDTH= 7;
 
   //==============================
   // Wire declarations

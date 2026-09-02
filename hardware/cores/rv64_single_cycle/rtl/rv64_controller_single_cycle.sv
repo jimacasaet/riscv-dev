@@ -9,15 +9,7 @@
 
 module rv64_controller_single_cycle
 import typedefs_pkg::*;
-#(  
-  parameter   ALUOP_WIDTH     =  5,
-  parameter   OPCODE_WIDTH    =  7,
-  parameter   FUNCT3_WIDTH    =  3,
-  parameter   FUNCT7_WIDTH    =  7,
-  parameter   WMASK_WIDTH     =  8,
-  parameter   PCSRC_WIDTH     =  2,
-  parameter   REGWRSRC_WIDTH  =  2
-)(
+(
     //==============================
     //  Control Inputs
     //==============================
@@ -49,7 +41,7 @@ import typedefs_pkg::*;
   localparam   opcode_ld       = 7'b0000011;
   localparam   opcode_addi     = 7'b0010011;
   localparam   opcode_jalr     = 7'b1100111;
-  localparam   opcode_sd       = 7'b0100011;
+  localparam   opcode_stype    = 7'b0100011;
   localparam   opcode_rtype    = 7'b0110011;
   localparam   opcode_sbtype   = 7'b1100011;
   localparam   opcode_jal      = 7'b1101111;
@@ -57,7 +49,6 @@ import typedefs_pkg::*;
   //  FUNCT3
   //==============================
   localparam   funct3_ld       = 3'b011;
-  localparam   funct3_sd       = 3'b011;
   localparam   funct3_addsub   = 3'b000;
   localparam   funct3_and      = 3'b111;
   localparam   funct3_or       = 3'b110;
@@ -65,11 +56,24 @@ import typedefs_pkg::*;
   localparam   funct3_slt      = 3'b010;
   localparam   funct3_beq      = 3'b000;
   localparam   funct3_bne      = 3'b001;
+  localparam   funct3_sb       = 3'b000;
+  localparam   funct3_sh       = 3'b001;
+  localparam   funct3_sw       = 3'b010;
+  localparam   funct3_sd       = 3'b011;
   //==============================
   //  FUNCT7
   //==============================
   localparam   funct7_add      = 7'd0;
   localparam   funct7_sub      = 7'b0100000;
+
+  // Registers
+  // logic                     Branch;
+  // logic                     MemRead;
+  // logic [PCSRC_WIDTH-1:0]   PCSrc;
+  // logic [REGWRSRC_WIDTH-1:0]RegWrSrc;
+  // alu_op_e                ALUOp;
+  // logic                     ALUSrc;
+  // logic                     RegWrite;
 
   always_comb begin
     Branch      = 0;
@@ -118,12 +122,18 @@ import typedefs_pkg::*;
       // S-TYPE
       //===============================================================================
       
-      opcode_sd: begin
-        if(funct3==funct3_sd) begin
-          ALUSrc      = 1'b1;     // Choose Immediate as ALU inB
-          alu_op_d    = OP_ADD;   // Add ALU OP
-          wr_en       = 1'b1;     // Enable write to Data Memory
-        end
+      opcode_stype: begin
+        case(funct3) 
+          funct3_sd: begin
+            ALUSrc      = 1'b1;     // Choose Immediate as ALU inB
+            alu_op_d    = OP_ADD;   // Add ALU OP
+            wr_en       = 1'b1;     // Enable write to Data Memory
+          end
+
+          // funct3_sb: begin
+          //   ALUSrc      = 
+          // end
+        endcase
       end
       
       //===============================================================================
