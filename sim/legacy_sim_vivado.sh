@@ -5,12 +5,13 @@ REPO_ROOT="${GIT_TOP:-$(git rev-parse --show-toplevel)}"
 WORK_DIR=$(pwd)
 TOP_MODULE="rv64_single_cycle_tb_legacy"
 FILE_LIST="${REPO_ROOT}/hardware/common/common_rtl.f"
+TESTNAME="${TESTNAME:-arithtest}"
 
 echo "=================================================="
 echo " Running Vivado Simulator (xsim)"
 echo " Workdir:   ${WORK_DIR}"
 echo " Filelist:  ${FILE_LIST}"
-echo " Memory:    "
+echo " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
 echo "=================================================="
 
 # --- 2. Step 1: Parse Filelist & Compile (xvlog) ---
@@ -31,6 +32,8 @@ xelab "${TOP_MODULE}" \
   -s sim_snapshot \
   -timescale 1ns/1ps \
   -debug typical \
+  -cov_db_dir ./cov_db \
+  -cc_type sbct \
   -log xelab.log
 
 echo "[3/3] Executing simulation (xsim)..."
@@ -38,7 +41,9 @@ echo "[3/3] Executing simulation (xsim)..."
 # Pass testplusargs via xsim's -testplusarg switch
 xsim sim_snapshot \
   -runall \
+  -cov_db_dir ./cov_db \
+  -cov_db_name "${TESTNAME}_cov" \
   -log sim.log \
-  -testplusarg "MEMDATA=$GIT_ROOT/software/legacy_tests/arithtest_data.mem" \
-  -testplusarg "MEMPROG=$GIT_ROOT/software/legacy_tests/arithtest_prog.mem"
+  -testplusarg "MEMDATA=$GIT_ROOT/software/legacy_tests/${TESTNAME}_data.mem" \
+  -testplusarg "MEMPROG=$GIT_ROOT/software/legacy_tests/${TESTNAME}_prog.mem"
   
