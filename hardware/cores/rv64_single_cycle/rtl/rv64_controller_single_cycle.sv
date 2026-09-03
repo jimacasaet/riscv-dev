@@ -139,7 +139,7 @@ import typedefs_pkg::*;
       //===============================================================================
       // B-TYPE
       //===============================================================================
-      opcode_sbtype: begin
+      opcode_btype: begin
           Branch = 1'b1;
           if(funct3==funct3_beq) begin
               alu_op_d = OP_XOR;

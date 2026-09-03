@@ -6,21 +6,12 @@
 //  E-Mail      : macasaetjohn@gmail.com
 //------------------------------------------------------------------------------------------------------
 
-module rv64_imm_gen #(
-  parameter   InstWidth   = 32,
-  parameter   DataWidth   = 64,
-  parameter   OpcodeWidth = 7
-)(
+module rv64_imm_gen
+import typedefs_pkg::*;
+(
   input       [InstWidth-1:0]    inst_i,
   output      [DataWidth-1:0]    imm_o
 );
-  localparam   opcode_ld       = 7'b0000011;
-  localparam   opcode_addi     = 7'b0010011;
-  localparam   opcode_jalr     = 7'b1100111;
-  localparam   opcode_sd       = 7'b0100011;
-  localparam   opcode_rtype    = 7'b0110011;
-  localparam   opcode_btype    = 7'b1100011;
-  localparam   opcode_jal      = 7'b1101111;
 
   logic                   imm_d;
   logic [OpcodeWidth-1:0] opcode;

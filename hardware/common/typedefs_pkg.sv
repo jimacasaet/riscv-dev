@@ -36,14 +36,26 @@ package typedefs_pkg;
     ,OP_DEFAULT
   } alu_op_e;  
 
-  // OPCODES
-  parameter   opcode_ld       = 7'b0000011;
-  parameter   opcode_addi     = 7'b0010011;
-  parameter   opcode_jalr     = 7'b1100111;
-  parameter   opcode_stype    = 7'b0100011;
-  parameter   opcode_rtype    = 7'b0110011;
-  parameter   opcode_sbtype   = 7'b1100011;
+  //======================================
+  // Instruction OPCODES
+  ///======================================
+  // U-type 
+  parameter   opcode_lui      = 7'b0110111;
+  parameter   opcode_auipc    = 7'b0010111;
+  // J-type
   parameter   opcode_jal      = 7'b1101111;
+  // I-type 
+  parameter   opcode_jalr     = 7'b1100111;
+  parameter   opcode_loads    = 7'b0000011;
+  parameter   opcode_addi     = 7'b0010011;
+  parameter   opcode_ld       = 7'b0000011;
+  // B-type
+  parameter   opcode_btype    = 7'b1100011;
+  // S-type
+  parameter   opcode_stype    = 7'b0100011;
+  parameter   opcode_sd       = 7'b0100011;
+  // R-type
+  parameter   opcode_rtype    = 7'b0110011;
 
   // FUNCT3 CODES
   parameter   funct3_ld       = 3'b011;
