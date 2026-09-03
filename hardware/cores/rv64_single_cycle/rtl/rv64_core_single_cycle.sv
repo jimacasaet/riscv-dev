@@ -42,13 +42,13 @@ import typedefs_pkg::*;
   wire    [RdataWidth-1:0]   mux3_to_RegFile; // ALU/DataMem MUX to RegFile
   
   // ALU
-  wire    [DATA_WIDTH-1:0]    ALURes;
+  wire    [DataWidth-1:0]     ALURes;
   wire                        zero;
   
   // Control Input Wires
-  wire    [OPCODE_WIDTH-1:0]  opcode;
-  wire    [FUNCT3_WIDTH-1:0]  funct3;
-  wire    [FUNCT7_WIDTH-1:0]  funct7;
+  wire    [OpcodeWidth-1:0]  opcode;
+  wire    [Funct3Width-1:0]  funct3;
+  wire    [Funct7Width-1:0]  funct7;
   
   // Control Output Wires
   wire                        Branch, MemRead, MemToReg;

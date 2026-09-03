@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e # Exit immediately when a command exits with non-zero status
 
 export GIT_ROOT=$(git rev-parse --show-toplevel)
 

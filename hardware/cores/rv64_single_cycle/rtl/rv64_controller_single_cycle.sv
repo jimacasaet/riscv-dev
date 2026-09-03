@@ -13,16 +13,16 @@ import typedefs_pkg::*;
     //==============================
     //  Control Inputs
     //==============================
-    input   [OPCODE_WIDTH-1:0]      opcode,
-    input   [FUNCT3_WIDTH-1:0]      funct3,
-    input   [FUNCT7_WIDTH-1:0]      funct7,
+    input   [OpcodeWidth-1:0]      opcode,
+    input   [Funct3Width-1:0]      funct3,
+    input   [Funct7Width-1:0]      funct7,
     //==============================
     //  Control Outputs
     //==============================
     output reg                     Branch,
     output reg                     MemRead,
-    output reg [PCSRC_WIDTH-1:0]   PCSrc,
-    output reg [REGWRSRC_WIDTH-1:0]RegWrSrc,
+    output reg [PcSrcWidth-1:0]    PCSrc,
+    output reg [RegWrSrcWidth-1:0] RegWrSrc,
     output alu_op_e                ALUOp,
     output reg                     ALUSrc,
     output reg                     RegWrite,
@@ -30,50 +30,19 @@ import typedefs_pkg::*;
     //  Processor Outputs
     //==============================
     output reg                     wr_en,
-    output reg [WMASK_WIDTH-1:0]   wmask
+    output reg [WmaskWidth-1:0]   wmask
 );
 
   alu_op_e  alu_op_d;
 
-  //==============================
-  //  OPCODES
-  //==============================
-  localparam   opcode_ld       = 7'b0000011;
-  localparam   opcode_addi     = 7'b0010011;
-  localparam   opcode_jalr     = 7'b1100111;
-  localparam   opcode_stype    = 7'b0100011;
-  localparam   opcode_rtype    = 7'b0110011;
-  localparam   opcode_sbtype   = 7'b1100011;
-  localparam   opcode_jal      = 7'b1101111;
-  //==============================
-  //  FUNCT3
-  //==============================
-  localparam   funct3_ld       = 3'b011;
-  localparam   funct3_addsub   = 3'b000;
-  localparam   funct3_and      = 3'b111;
-  localparam   funct3_or       = 3'b110;
-  localparam   funct3_xor      = 3'b100;
-  localparam   funct3_slt      = 3'b010;
-  localparam   funct3_beq      = 3'b000;
-  localparam   funct3_bne      = 3'b001;
-  localparam   funct3_sb       = 3'b000;
-  localparam   funct3_sh       = 3'b001;
-  localparam   funct3_sw       = 3'b010;
-  localparam   funct3_sd       = 3'b011;
-  //==============================
-  //  FUNCT7
-  //==============================
-  localparam   funct7_add      = 7'd0;
-  localparam   funct7_sub      = 7'b0100000;
-
   // Registers
-  // logic                     Branch;
-  // logic                     MemRead;
-  // logic [PCSRC_WIDTH-1:0]   PCSrc;
-  // logic [REGWRSRC_WIDTH-1:0]RegWrSrc;
-  // alu_op_e                ALUOp;
-  // logic                     ALUSrc;
-  // logic                     RegWrite;
+  // logic                      Branch;
+  // logic                      MemRead;
+  // logic [PcSrcWidth-1:0]     PCSrc;
+  // logic [RegWrSrcWidth-1:0]  RegWrSrc;
+  // alu_op_e                   ALUOp;
+  // logic                      ALUSrc;
+  // logic                      RegWrite;
 
   always_comb begin
     Branch      = 0;
@@ -168,7 +137,7 @@ import typedefs_pkg::*;
       end
       
       //===============================================================================
-      // SB-TYPE
+      // B-TYPE
       //===============================================================================
       opcode_sbtype: begin
           Branch = 1'b1;
