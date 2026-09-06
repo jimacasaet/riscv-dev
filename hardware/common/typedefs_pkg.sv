@@ -46,14 +46,13 @@ package typedefs_pkg;
   parameter   opcode_jal      = 7'b1101111;
   // I-type 
   parameter   opcode_jalr     = 7'b1100111;
-  parameter   opcode_loads    = 7'b0000011;
-  parameter   opcode_addi     = 7'b0010011;
-  parameter   opcode_ld       = 7'b0000011;
+  parameter   opcode_load     = 7'b0000011;
+  parameter   opcode_op_immw  = 7'b0010011;
+  parameter   opcode_op_immdw = 7'b0011011;
   // B-type
   parameter   opcode_btype    = 7'b1100011;
   // S-type
   parameter   opcode_stype    = 7'b0100011;
-  parameter   opcode_sd       = 7'b0100011;
   // R-type
   parameter   opcode_rtype    = 7'b0110011;
 

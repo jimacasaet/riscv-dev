@@ -59,7 +59,7 @@ import typedefs_pkg::*;
       //===============================================================================
       // I-TYPE
       //===============================================================================
-      opcode_ld: begin
+      opcode_load: begin
         if(funct3==funct3_ld) begin
           RegWrite    = 1'b1;     // Write to Register File
           RegWrSrc    = 2'd1;     // Choose rdata input to write to Register File
@@ -68,7 +68,7 @@ import typedefs_pkg::*;
         end
       end
       
-      opcode_addi: begin
+      opcode_op_immw: begin
         if(funct3==0) begin
           RegWrite    = 1'b1;     // Write to Register File
           RegWrSrc    = 2'd0;     // Choose ALURes to write to Register File
