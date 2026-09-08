@@ -113,14 +113,25 @@ import typedefs_pkg::*;
       opcode_rtype: begin  
         regwrite_d    = 1'b1;         // Write to Register File         
         case(funct3) 
-          funct3_addsub: begin 
-            if(funct7==funct7_add) alu_op_d = OP_ADD;
-            else if(funct7==funct7_sub) alu_op_d = OP_SUB;
-          end
-          funct3_and: alu_op_d = OP_AND; 
-          funct3_or:  alu_op_d = OP_OR; 
-          funct3_xor: alu_op_d = OP_XOR; 
-          funct3_slt: alu_op_d = OP_SLT; 
+          funct3_addsub:
+            case(funct7) 
+              funct7_add: alu_op_d = OP_ADD;
+              funct7_sub: alu_op_d = OP_SUB;
+              default:    alu_op_d = OP_DEFAULT;
+            endcase
+          funct3_sll:     alu_op_d = OP_SLL;
+          funct3_slt:     alu_op_d = OP_SLT; 
+          funct3_sltu:    alu_op_d = OP_SLTU;
+          funct3_xor:     alu_op_d = OP_XOR; 
+          funct3_srlsra: 
+            case(funct7)
+              funct7_srl: alu_op_d = OP_SRL;
+              funct7_sra: alu_op_d = OP_SRA;
+              default:    alu_op_d = OP_DEFAULT;
+            endcase
+          funct3_or:      alu_op_d = OP_OR; 
+          funct3_and:     alu_op_d = OP_AND; 
+          default:        alu_op_d = OP_DEFAULT;
         endcase
       end
       

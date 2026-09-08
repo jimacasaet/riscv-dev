@@ -56,21 +56,34 @@ package typedefs_pkg;
   // R-type
   parameter   opcode_rtype    = 7'b0110011;
 
+  //======================================
   // FUNCT3 CODES
+  ///======================================
+  // I-Type
   parameter   funct3_ld       = 3'b011;
+  // R-Type
   parameter   funct3_addsub   = 3'b000;
-  parameter   funct3_and      = 3'b111;
-  parameter   funct3_or       = 3'b110;
-  parameter   funct3_xor      = 3'b100;
+  parameter   funct3_sll      = 3'b001;
   parameter   funct3_slt      = 3'b010;
+  parameter   funct3_sltu     = 3'b011;
+  parameter   funct3_xor      = 3'b100;
+  parameter   funct3_srlsra   = 3'b101;
+  parameter   funct3_or       = 3'b110;
+  parameter   funct3_and      = 3'b111;
+  // B-Type
   parameter   funct3_beq      = 3'b000;
   parameter   funct3_bne      = 3'b001;
+  // S-Type
   parameter   funct3_sb       = 3'b000;
   parameter   funct3_sh       = 3'b001;
   parameter   funct3_sw       = 3'b010;
   parameter   funct3_sd       = 3'b011;
 
+  //======================================
   // FUNCT7 CODES
-  parameter   funct7_add      = 7'd0;
+  ///======================================
+  parameter   funct7_add      = 7'b0000000;
   parameter   funct7_sub      = 7'b0100000;
+  parameter   funct7_srl      = 7'b0000000;
+  parameter   funct7_sra      = 7'b0100000;
 endpackage
