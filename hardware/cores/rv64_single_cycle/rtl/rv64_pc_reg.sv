@@ -15,13 +15,13 @@ module rv64_pc_reg #(
     output     [PcWidth-1:0]    current_o
 );
 
-  logic        [PcWidth-1:0]    current_d;
+  logic        [PcWidth-1:0]    current_q;
 
   always@(posedge clk_i) begin
-    if(!rst_ni) current_d <= 0;
-    else        current_d <= next_i;
+    if(!rst_ni) current_q <= 0;
+    else        current_q <= next_i;
   end
 
-  assign current_o = current_d;
+  assign current_o = current_q;
 
 endmodule // rv64_pc_reg

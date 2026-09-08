@@ -5,15 +5,16 @@ module prim_mux3 #(
     input       [WIDTH-1:0]   in1,
     input       [WIDTH-1:0]   in2,
     input       [1:0]         sel,
-    output reg  [WIDTH-1:0]   out
+    output      [WIDTH-1:0]   out
 );
-    
-    always@(*) begin
-        case(sel)
-            0:  out = in0;
-            1:  out = in1;
-            2:  out = in2;
-            default: out = 0;
-        endcase
-    end
+  logic out_d;  
+  always_comb begin
+    case(sel)
+      0:  out_d = in0;
+      1:  out_d = in1;
+      2:  out_d = in2;
+      default: out_d = 0;
+    endcase
+  end
+  assign out = out_d;
 endmodule

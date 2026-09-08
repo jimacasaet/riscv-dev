@@ -22,7 +22,7 @@ module rv64_register_file #(
   output  [DataWidth-1:0]     reg_read_data2_o
 );
   integer i;
-  reg [DataWidth-1:0] register_file [0:NumReg-1];
+  logic [DataWidth-1:0] register_file [0:NumReg-1];
     
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if(!rst_ni)
