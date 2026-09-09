@@ -7,7 +7,7 @@ module prim_mux3 #(
     input       [1:0]         sel,
     output      [WIDTH-1:0]   out
 );
-  logic out_d;  
+  logic [WIDTH-1:0] out_d;  
   always_comb begin
     case(sel)
       0:  out_d = in0;

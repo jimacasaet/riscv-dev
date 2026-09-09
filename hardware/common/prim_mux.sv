@@ -6,7 +6,7 @@ module prim_mux #(
   input                 sel,
   output  [WIDTH-1:0]   out
 );
-  logic out_d;
+  logic [WIDTH-1:0] out_d;
 
   always_comb begin 
     out_d = (sel) ? in1 : in0;
