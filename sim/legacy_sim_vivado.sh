@@ -30,12 +30,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "=================================================="
-echo " Running Vivado Simulator (xsim)"
-echo " Workdir:   ${WORK_DIR}"
-echo " Filelist:  ${FILE_LIST}"
-echo " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
-echo "=================================================="
+echo    "=================================================="
+echo    " Running Vivado Simulator (xsim)"
+echo    " Workdir:   ${WORK_DIR}"
+echo    " Filelist:  ${FILE_LIST}"
+echo -e " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
+echo    "=================================================="
 
 # --- 2. Compilation and Elaboration ---
 

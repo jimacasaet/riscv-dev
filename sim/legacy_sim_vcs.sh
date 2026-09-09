@@ -11,12 +11,12 @@ TESTNAME="arithtest"
 
 ACTION="all"
 
-echo "=================================================="
-echo " Running VCS Sim"
-echo " Workdir:   ${WORK_DIR}"
-echo " Filelist:  ${FILE_LIST}"
-echo " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
-echo "=================================================="
+echo    "=================================================="
+echo    " Running VCS Sim"
+echo    " Workdir:   ${WORK_DIR}"
+echo    " Filelist:  ${FILE_LIST}"
+echo -e " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
+echo    "=================================================="
 
 # --- Step 1: Parse Filelist & Compile (vcs) ---
 if [[ "${ACTION}" == "all" || "${ACTION}" == "compile" ]]; then

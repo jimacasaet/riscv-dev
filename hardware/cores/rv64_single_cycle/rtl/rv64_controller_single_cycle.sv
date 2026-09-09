@@ -51,7 +51,7 @@ import typedefs_pkg::*;
     memread_d     = 0;
     pcsrc_d       = 0;
     regwrsrc_d    = 0;
-    alu_op_d    = OP_DEFAULT;
+    alu_op_d      = OP_DEFAULT;
     alusrc_d      = 0;
     regwrite_d    = 0;
     wr_en_d       = 0;
@@ -65,18 +65,24 @@ import typedefs_pkg::*;
         if(funct3==funct3_ld) begin
           regwrite_d    = 1'b1;     // Write to Register File
           regwrsrc_d    = 2'd1;     // Choose rdata input to write to Register File
-          alu_op_d    = OP_ADD;   // Add op
+          alu_op_d      = OP_ADD;   // Add op
           alusrc_d      = 1'b1;     // Choose i-type immediate as ALU inB
         end
       end
       
       opcode_op_immw: begin
-        if(funct3==0) begin
-          regwrite_d    = 1'b1;     // Write to Register File
-          regwrsrc_d    = 2'd0;     // Choose ALURes to write to Register File
-          alu_op_d    = OP_ADD;   // Add ALU OP
-          alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
-        end
+        regwrite_d    = 1'b1;     // Write to Register File
+        regwrsrc_d    = 2'd0;     // Choose ALURes to write to Register File
+        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        case(funct3)
+          funct3_addi:  alu_op_d    = OP_ADD;
+          funct3_slti:  alu_op_d    = OP_SLT;
+          funct3_sltiu: alu_op_d    = OP_SLTU;
+          funct3_xori:  alu_op_d    = OP_XOR;
+          funct3_ori:   alu_op_d    = OP_OR;
+          funct3_andi:  alu_op_d    = OP_AND;
+          default:      alu_op_d    = OP_ADD;  
+        endcase
       end
       
       opcode_jalr: begin

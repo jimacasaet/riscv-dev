@@ -61,6 +61,12 @@ package typedefs_pkg;
   ///======================================
   // I-Type
   parameter   funct3_ld       = 3'b011;
+  parameter   funct3_addi     = 3'b000;
+  parameter   funct3_slti     = 3'b010;
+  parameter   funct3_sltiu    = 3'b011;
+  parameter   funct3_xori     = 3'b100;
+  parameter   funct3_ori      = 3'b110;
+  parameter   funct3_andi     = 3'b111;
   // R-Type
   parameter   funct3_addsub   = 3'b000;
   parameter   funct3_sll      = 3'b001;

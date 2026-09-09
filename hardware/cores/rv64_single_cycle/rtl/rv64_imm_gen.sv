@@ -13,7 +13,7 @@ import typedefs_pkg::*;
   output      [DataWidth-1:0]    imm_o
 );
 
-  logic                   imm_d;
+  logic [DataWidth-1:0]   imm_d;
   logic [OpcodeWidth-1:0] opcode;
 
   always_comb begin
