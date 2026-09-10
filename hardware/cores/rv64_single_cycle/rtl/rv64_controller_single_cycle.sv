@@ -113,7 +113,7 @@ import typedefs_pkg::*;
           funct3_sb: wmask_d = 8'b0000_0001; // FIXME: Compute correct Wmasks with addr shift << addr_i[2:0];
           funct3_sh: wmask_d = 8'b0000_0011; // << {addr_i[2:1], 1'b0};
           funct3_sw: wmask_d = 8'b0000_1111; // << {addr_i[2], 2'b00};
-          funct3_sd: wmask_d = 8'h1111_1111; 
+          funct3_sd: wmask_d = 8'b1111_1111; 
           default:   wmask_d = 0;
         endcase
       end
