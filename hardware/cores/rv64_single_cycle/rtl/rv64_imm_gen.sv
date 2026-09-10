@@ -15,6 +15,8 @@ import typedefs_pkg::*;
 
   logic [DataWidth-1:0]   imm_d;
   logic [OpcodeWidth-1:0] opcode;
+  logic [Funct3Width-1:0] funct3;
+  logic [Funct7Width-1:0] funct7;
 
   always_comb begin
     imm_d = '0;
@@ -22,18 +24,27 @@ import typedefs_pkg::*;
       // U-type
       opcode_lui, opcode_auipc: 
         imm_d = { {32{inst_i[31]}} , inst_i[31:12], 12'b0};
+      
       // J-type
       opcode_jal:     
         imm_d = { {43{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
+      
       // I-type
-      opcode_jalr, opcode_load, opcode_op_immw, opcode_op_immdw:    
-        imm_d = { {52{inst_i[31]}} , inst_i[31:20]};
+      opcode_jalr, opcode_load, opcode_op_immw, opcode_op_immdw:
+        case(funct3)
+          funct3_slli, funct3_srlisrai: 
+                      imm_d = { {58{inst_i[24]}} , inst_i[24:20]};
+          default:    imm_d = { {52{inst_i[31]}} , inst_i[31:20]};
+        endcase
+      
       // B-type
       opcode_btype:   
         imm_d = { {51{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+      
       // S-Type
       opcode_stype:      
         imm_d = { {52{inst_i[31]}} , inst_i[31:25], inst_i[11:7]};
+      
       default:
         imm_d = '0;
     endcase

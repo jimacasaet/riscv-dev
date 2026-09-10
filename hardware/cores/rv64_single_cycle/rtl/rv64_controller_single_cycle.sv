@@ -81,18 +81,23 @@ import typedefs_pkg::*;
           funct3_xori:  alu_op_d    = OP_XOR;
           funct3_ori:   alu_op_d    = OP_OR;
           funct3_andi:  alu_op_d    = OP_AND;
+          funct3_slli:  alu_op_d    = OP_SLL;
+          funct3_srlisrai:
+            case(funct7)
+              funct7_srli: alu_op_d = OP_SRL;
+              funct7_srai: alu_op_d = OP_SRA;
+              default:     alu_op_d = OP_DEFAULT;
+            endcase
           default:      alu_op_d    = OP_ADD;  
         endcase
       end
       
       opcode_jalr: begin
-        if(funct3==0) begin
-          regwrite_d    = 1'b1;     // Write to Register File
-          regwrsrc_d    = 2'd2;     // Choose PC+4 to write to Register File
-          alu_op_d    = OP_ADD;   // Add ALU OP
-          alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
-          pcsrc_d       = 2'd2;     // Choose ALURes to write to PC
-        end
+        regwrite_d    = 1'b1;     // Write to Register File
+        regwrsrc_d    = 2'd2;     // Choose PC+4 to write to Register File
+        alu_op_d      = OP_ADD;   // Add ALU OP
+        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        pcsrc_d       = 2'd2;     // Choose ALURes to write to PC
       end
       
       //===============================================================================
@@ -100,16 +105,16 @@ import typedefs_pkg::*;
       //===============================================================================
       
       opcode_stype: begin
-        case(funct3) 
-          funct3_sd: begin
-            alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
-            alu_op_d    = OP_ADD;   // Add ALU OP
-            wr_en_d       = 1'b1;     // Enable write to Data Memory
-          end
-
-          // funct3_sb: begin
-          //   alusrc_d      = 
-          // end
+        wr_en_d       = 1'b1;     // Enable write to Data Memory
+        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        alu_op_d      = OP_ADD;   // Add ALU OP
+        // FIXME: Move wmask output to LSU (new)
+        case(funct3)
+          funct3_sb: wmask_d = 8'b0000_0001; // FIXME: Compute correct Wmasks with addr shift << addr_i[2:0];
+          funct3_sh: wmask_d = 8'b0000_0011; // << {addr_i[2:1], 1'b0};
+          funct3_sw: wmask_d = 8'b0000_1111; // << {addr_i[2], 2'b00};
+          funct3_sd: wmask_d = 8'h1111_1111; 
+          default:   wmask_d = 0;
         endcase
       end
       

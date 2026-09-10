@@ -10,6 +10,7 @@ FILE_LIST="${REPO_ROOT}/verification/rv64_single_cycle_tb_legacy/legacy_tb.f"
 TESTNAME="arithtest"
 
 ACTION="all"
+RUN="-runall"
 
 # Parse arguments for flags
 while [[ $# -gt 0 ]]; do
@@ -20,6 +21,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -run|-r)
             ACTION="run"
+            shift
+            ;;
+         -gui|-g)
+            RUN="-gui"
             shift
             ;;
         *)
@@ -34,7 +39,7 @@ echo    "=================================================="
 echo    " Running Vivado Simulator (xsim)"
 echo    " Workdir:   ${WORK_DIR}"
 echo    " Filelist:  ${FILE_LIST}"
-echo -e " Memory:    ${TESTNAME}_data.mem\t${TESTNAME}_data.mem"
+echo -e " Memory:    ${TESTNAME}_prog.mem\t${TESTNAME}_data.mem"
 echo    "=================================================="
 
 # --- 2. Compilation and Elaboration ---
@@ -62,7 +67,7 @@ fi
 if [[ "${ACTION}" == "all" || "${ACTION}" == "run" ]]; then
   echo "Executing simulation (xsim)..."
   xsim sim_snapshot \
-    -runall \
+    ${RUN} \
     -cov_db_dir ./cov_db \
     -cov_db_name "${TESTNAME}_cov" \
     -log sim.log \

@@ -67,6 +67,8 @@ package typedefs_pkg;
   parameter   funct3_xori     = 3'b100;
   parameter   funct3_ori      = 3'b110;
   parameter   funct3_andi     = 3'b111;
+  parameter   funct3_slli     = 3'b001;
+  parameter   funct3_srlisrai = 3'b101;
   // R-Type
   parameter   funct3_addsub   = 3'b000;
   parameter   funct3_sll      = 3'b001;
@@ -92,4 +94,6 @@ package typedefs_pkg;
   parameter   funct7_sub      = 7'b0100000;
   parameter   funct7_srl      = 7'b0000000;
   parameter   funct7_sra      = 7'b0100000;
+  parameter   funct7_srli     = 7'b0000000;
+  parameter   funct7_srai     = 7'b0100000;
 endpackage
