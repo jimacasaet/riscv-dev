@@ -1,3 +1,4 @@
 *
 !*.sh
 !Makefile
+!*.tcl

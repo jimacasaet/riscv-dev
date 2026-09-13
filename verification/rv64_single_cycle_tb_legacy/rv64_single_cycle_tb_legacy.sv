@@ -75,6 +75,9 @@ module rv64_single_cycle_tb_legacy();
         $recordfile("dump.trn");
         $recordvars();
       end
+      `elsif XILINX_SIMULATOR begin
+        $display("[Xilinx Simulator] Dumping through tcl script");
+      end
       `else begin
         $dumpfile("dump.vcd");
         $dumpvars();

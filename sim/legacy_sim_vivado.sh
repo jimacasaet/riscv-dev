@@ -23,6 +23,10 @@ while [[ $# -gt 0 ]]; do
             ACTION="run"
             shift
             ;;
+         -cov|-v)
+            ACTION="run"
+            shift
+            ;;
          -gui|-g)
             RUN="-gui"
             shift
@@ -56,7 +60,7 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "compile" ]]; then
   xelab "${TOP_MODULE}" \
     -s sim_snapshot \
     -timescale 1ns/1ps \
-    -debug typical \
+    -debug all \
     -cov_db_dir ./cov_db \
     -cc_type sbct \
     -log xelab.log
@@ -66,13 +70,19 @@ fi
 # --- 3. Execution ---
 if [[ "${ACTION}" == "all" || "${ACTION}" == "run" ]]; then
   echo "Executing simulation (xsim)..."
-  xsim sim_snapshot \
-    ${RUN} \
-    -cov_db_dir ./cov_db \
-    -cov_db_name "${TESTNAME}_cov" \
-    -log sim.log \
+  xsim sim_snapshot -tclbatch $GIT_ROOT/sim/run.tcl \
     -testplusarg "MEMDATA=$GIT_ROOT/software/legacy_tests/${TESTNAME}_data.mem" \
     -testplusarg "MEMPROG=$GIT_ROOT/software/legacy_tests/${TESTNAME}_prog.mem"
+fi
+
+## --- 4. Generate Code Coverage Report ---
+## FIXME: Migrate to separate script with db merge
+if [[ "${ACTION}" == "all" || "${ACTION}" == "cov" ]]; then
+  echo "Generating HTML Coverage Report (xcrg)..."
+  xcrg -cc_db sim_snapshot \
+  -cc_dir ${WORK_DIR}/cov_db/xsim.codeCov/ \
+  -report_dir . \
+  -report_format html
 fi
 
 echo "=================================================="
