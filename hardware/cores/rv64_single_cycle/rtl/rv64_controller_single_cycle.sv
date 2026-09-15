@@ -84,12 +84,25 @@ import typedefs_pkg::*;
           funct3_slli:  alu_op_d    = OP_SLL;
           funct3_srlisrai:
             case(funct7)
-              funct7_srli: alu_op_d = OP_SRL;
-              funct7_srai: alu_op_d = OP_SRA;
-              default:     alu_op_d = OP_DEFAULT;
+              funct7_srl:  alu_op_d = OP_SRL;
+              funct7_sra:  alu_op_d = OP_SRA;
             endcase
-          default:      alu_op_d    = OP_ADD;  
         endcase
+      end
+
+      opcode_op_immdw: begin
+        regwrite_d    = 1'b1;     // Write to Register File
+        regwrsrc_d    = 2'd0;     // Choose ALURes to write to Register File
+        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB  
+        case(funct3)
+          funct3_addiw:       alu_op_d  = OP_ADD;
+          funct3_slliw:       alu_op_d  = OP_SLL;
+          funct3_srliwsraiw:
+            case(funct7)
+              funct7_srl:     alu_op_d  = OP_SRLW;
+              funct7_sra:     alu_op_d  = OP_SRAW;
+            endcase
+        endcase      
       end
       
       opcode_jalr: begin
@@ -128,7 +141,6 @@ import typedefs_pkg::*;
             case(funct7) 
               funct7_add: alu_op_d = OP_ADD;
               funct7_sub: alu_op_d = OP_SUB;
-              default:    alu_op_d = OP_DEFAULT;
             endcase
           funct3_sll:     alu_op_d = OP_SLL;
           funct3_slt:     alu_op_d = OP_SLT; 
@@ -138,11 +150,28 @@ import typedefs_pkg::*;
             case(funct7)
               funct7_srl: alu_op_d = OP_SRL;
               funct7_sra: alu_op_d = OP_SRA;
-              default:    alu_op_d = OP_DEFAULT;
             endcase
           funct3_or:      alu_op_d = OP_OR; 
           funct3_and:     alu_op_d = OP_AND; 
-          default:        alu_op_d = OP_DEFAULT;
+        endcase
+      end
+
+      opcode_rtype_w: begin
+        regwrite_d    = 1'b1;         // Write to Register File 
+        case(funct3)
+          funct3_addwsubw: begin
+            case(funct7)
+              funct7_add:   alu_op_d = OP_ADDW;
+              funct7_sub:   alu_op_d = OP_SUBW;
+            endcase
+          end
+          funct3_sllw:      alu_op_d = OP_SLLW;
+          funct3_srlwsraw: begin
+            case(funct7)
+              funct7_srl:   alu_op_d = OP_SRLW;
+              funct7_sra:   alu_op_d = OP_SRAW;
+            endcase
+          end
         endcase
       end
       

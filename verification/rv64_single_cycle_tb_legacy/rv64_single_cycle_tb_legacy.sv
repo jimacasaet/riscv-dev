@@ -43,7 +43,7 @@ module rv64_single_cycle_tb_legacy();
         .rdata(rdata                              )
     );
     
-    legacy_program_mem i_program_mem(
+    legacy_program_mem#(.DATA_DEP(128)) i_program_mem(
         .addr (pc[ADDR_WID-1:ADDR_WID-PM_ADD_W]), 
         .rdata(inst                            )
     );
