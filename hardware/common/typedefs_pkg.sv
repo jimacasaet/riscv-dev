@@ -88,6 +88,10 @@ package typedefs_pkg;
   // B-Type
   parameter   funct3_beq      = 3'b000;
   parameter   funct3_bne      = 3'b001;
+  parameter   funct3_blt      = 3'b100;
+  parameter   funct3_bge      = 3'b101;
+  parameter   funct3_bltu     = 3'b110;
+  parameter   funct3_bgeu     = 3'b111;
   // S-Type
   parameter   funct3_sb       = 3'b000;
   parameter   funct3_sh       = 3'b001;

@@ -24,7 +24,8 @@ import typedefs_pkg::*;
   output [PcSrcWidth-1:0]        PCSrc,
   output [RegWrSrcWidth-1:0]     RegWrSrc,
   output alu_op_e                ALUOp,
-  output                         ALUSrc,
+  output                         ALUSrcA,
+  output                         ALUSrcB,
   output                         RegWrite,
   //==============================
   //  Processor Outputs
@@ -41,7 +42,8 @@ import typedefs_pkg::*;
   logic [PcSrcWidth-1:0]     pcsrc_d;
   logic [RegWrSrcWidth-1:0]  regwrsrc_d;
   alu_op_e                   aluop_d;
-  logic                      alusrc_d;
+  logic                      alusrc_a_d;
+  logic                      alusrc_b_d;
   logic                      regwrite_d;
   logic                      wr_en_d;
   logic [WmaskWidth-1:0]     wmask_d;
@@ -52,7 +54,8 @@ import typedefs_pkg::*;
     pcsrc_d       = 0;
     regwrsrc_d    = 0;
     alu_op_d      = OP_DEFAULT;
-    alusrc_d      = 0;
+    alusrc_a_d    = 0;
+    alusrc_b_d    = 0;
     regwrite_d    = 0;
     wr_en_d       = 0;
     wmask_d       = 8'hFF;
@@ -66,14 +69,14 @@ import typedefs_pkg::*;
           regwrite_d    = 1'b1;     // Write to Register File
           regwrsrc_d    = 2'd1;     // Choose rdata input to write to Register File
           alu_op_d      = OP_ADD;   // Add op
-          alusrc_d      = 1'b1;     // Choose i-type immediate as ALU inB
+          alusrc_b_d    = 1'b1;     // Choose i-type immediate as ALU inB
         end
       end
       
       opcode_op_immw: begin
         regwrite_d    = 1'b1;     // Write to Register File
         regwrsrc_d    = 2'd0;     // Choose ALURes to write to Register File
-        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        alusrc_b_d    = 1'b1;     // Choose Immediate as ALU inB
         case(funct3)
           funct3_addi:  alu_op_d    = OP_ADD;
           funct3_slti:  alu_op_d    = OP_SLT;
@@ -93,7 +96,7 @@ import typedefs_pkg::*;
       opcode_op_immdw: begin
         regwrite_d    = 1'b1;     // Write to Register File
         regwrsrc_d    = 2'd0;     // Choose ALURes to write to Register File
-        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB  
+        alusrc_b_d    = 1'b1;     // Choose Immediate as ALU inB  
         case(funct3)
           funct3_addiw:       alu_op_d  = OP_ADD;
           funct3_slliw:       alu_op_d  = OP_SLL;
@@ -109,7 +112,7 @@ import typedefs_pkg::*;
         regwrite_d    = 1'b1;     // Write to Register File
         regwrsrc_d    = 2'd2;     // Choose PC+4 to write to Register File
         alu_op_d      = OP_ADD;   // Add ALU OP
-        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        alusrc_b_d    = 1'b1;     // Choose Immediate as ALU inB
         pcsrc_d       = 2'd2;     // Choose ALURes to write to PC
       end
       
@@ -119,7 +122,7 @@ import typedefs_pkg::*;
       
       opcode_stype: begin
         wr_en_d       = 1'b1;     // Enable write to Data Memory
-        alusrc_d      = 1'b1;     // Choose Immediate as ALU inB
+        alusrc_b_d    = 1'b1;     // Choose Immediate as ALU inB
         alu_op_d      = OP_ADD;   // Add ALU OP
         // FIXME: Move wmask output to LSU (new)
         case(funct3)
@@ -180,12 +183,6 @@ import typedefs_pkg::*;
       //===============================================================================
       opcode_btype: begin
         branch_d = 1'b1;
-        if(funct3==funct3_beq) begin
-          alu_op_d = OP_XOR;
-        end
-        else if(funct3==funct3_bne) begin
-          alu_op_d = OP_ISEQ;
-        end
       end
       
       //===============================================================================
@@ -203,7 +200,7 @@ import typedefs_pkg::*;
         pcsrc_d       = 0;
         regwrsrc_d    = 0;
         alu_op_d      = OP_DEFAULT;
-        alusrc_d      = 0;
+        alusrc_b_d    = 0;
         regwrite_d    = 0;
         wr_en_d       = 0;
         wmask_d       = 0;
@@ -216,7 +213,7 @@ import typedefs_pkg::*;
   assign PCSrc    = pcsrc_d;
   assign RegWrSrc = regwrsrc_d;
   assign ALUOp    = alu_op_d;
-  assign ALUSrc   = alusrc_d;
+  assign ALUSrcB   = alusrc_b_d;
   assign RegWrite = regwrite_d;
   assign wr_en    = wr_en_d;
   assign wmask    = wmask_d;
