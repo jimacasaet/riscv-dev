@@ -11,6 +11,7 @@ TESTNAME="arithtest"
 
 ACTION="all"
 RUN="-runall"
+COV="nocov"
 
 # Parse arguments for flags
 while [[ $# -gt 0 ]]; do
@@ -24,7 +25,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
          -cov|-v)
-            ACTION="run"
+            COV="make_cov"
             shift
             ;;
          -gui|-g)
@@ -77,7 +78,7 @@ fi
 
 ## --- 4. Generate Code Coverage Report ---
 ## FIXME: Migrate to separate script with db merge
-if [[ "${ACTION}" == "all" || "${ACTION}" == "cov" ]]; then
+if [[ "${COV}" == "make_cov"]]; then
   echo "Generating HTML Coverage Report (xcrg)..."
   xcrg -cc_db sim_snapshot \
   -cc_dir ${WORK_DIR}/cov_db/xsim.codeCov/ \
